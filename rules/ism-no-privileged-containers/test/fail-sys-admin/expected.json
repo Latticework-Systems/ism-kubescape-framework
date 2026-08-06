@@ -1,0 +1,6 @@
+{
+  "count": 1,
+  "alerts": [
+    "container 'api' is privileged or adds SYS_ADMIN"
+  ]
+}

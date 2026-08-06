@@ -1,0 +1,6 @@
+{
+  "count": 1,
+  "alerts": [
+    "container image 'ghcr.io/your-org-evil/app:v1' is not from an approved registry or repository"
+  ]
+}

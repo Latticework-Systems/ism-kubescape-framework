@@ -1,0 +1,363 @@
+{
+  "schema_version": "1.0",
+  "source": {
+    "canonical": "../ism-mapping.yaml",
+    "ism_release": "2026-06",
+    "generated": true,
+    "provenance_lock": "../provenance.lock.yaml"
+  },
+  "checks": [
+    {
+      "rule_id": "ism-allowed-registries",
+      "provenance": {
+        "disposition": "adapt",
+        "upstream": {
+          "repository": "https://github.com/kubescape/regolibrary",
+          "ref": "01f57decc4a771facfb7166f02af986ccb560203",
+          "control_id": "C-0078",
+          "rule_name": "container-image-repository-v1"
+        },
+        "rationale": "The upstream rule provides the base allow-list behaviour; the local implementation also accepts the public Kyverno registry ConfigMap."
+      },
+      "ism_controls": [
+        {
+          "ism_id": "ISM-1490",
+          "title": "Application control is implemented on internet-facing servers.",
+          "coverage": "partial",
+          "evidence_note": "Scan and PolicyReport results show workload image and execution guardrails on Kubernetes servers; they do not prove host or endpoint application control."
+        },
+        {
+          "ism_id": "ISM-1657",
+          "title": "Application control restricts the execution of executables, libraries, scripts, installers, compiled HTML, HTML applications and control panel applets to an organisation-approved set.",
+          "coverage": "partial",
+          "evidence_note": "Approved-image and workload-execution findings evidence the Kubernetes translation of application control; they do not inspect binaries inside images."
+        },
+        {
+          "ism_id": "ISM-1871",
+          "title": "Application control is applied to all locations other than user profiles and temporary folders used by operating systems, web browsers and email clients.",
+          "coverage": "partial",
+          "evidence_note": "Cluster-wide workload findings show whether the Kubernetes translation is applied across scanned namespaces; they do not assess host filesystem locations."
+        }
+      ]
+    },
+    {
+      "rule_id": "ism-drop-all-capabilities",
+      "provenance": {
+        "disposition": "adapt",
+        "upstream": {
+          "repository": "https://github.com/kubescape/regolibrary",
+          "ref": "01f57decc4a771facfb7166f02af986ccb560203",
+          "control_id": "C-0046",
+          "rule_name": "insecure-capabilities"
+        },
+        "rationale": "The local rule uses the upstream capability model but requires every regular and init container to drop ALL capabilities."
+      },
+      "ism_controls": [
+        {
+          "ism_id": "ISM-1246",
+          "title": "Server applications are hardened using ASD and vendor hardening guidance, with the most restrictive guidance taking precedence when conflicts occur.",
+          "coverage": "partial",
+          "evidence_note": "Findings show selected Kubernetes workload hardening settings; they do not prove that all ASD and vendor guidance was identified, reconciled or implemented."
+        },
+        {
+          "ism_id": "ISM-1604",
+          "title": "When using a software-based isolation mechanism that consumes shared physical computing resources, the configuration of the isolation mechanism is hardened by removing unneeded functionality and restricting access to the administrative interface used to manage the isolation mechanism.",
+          "coverage": "partial",
+          "evidence_note": "Findings show selected container isolation and workload hardening settings; they do not assess the Kubernetes control plane, node runtime configuration or every administrative interface used to manage the isolation mechanism."
+        }
+      ]
+    },
+    {
+      "rule_id": "ism-minimise-clusterrolebindings",
+      "provenance": {
+        "disposition": "custom",
+        "rationale": "Upstream administrative-role controls identify cluster-admin-equivalent access, not every non-system cluster-wide service-account binding."
+      },
+      "ism_controls": [
+        {
+          "ism_id": "ISM-1883",
+          "title": "Privileged user accounts explicitly authorised to access online services are strictly limited to only what is required for users and services to undertake their duties.",
+          "coverage": "partial",
+          "evidence_note": "RBAC and service-account findings show Kubernetes privilege breadth; they do not prove authorisation workflow, human account lifecycle or external systems."
+        }
+      ]
+    },
+    {
+      "rule_id": "ism-network-policy-coverage",
+      "provenance": {
+        "disposition": "adapt",
+        "upstream": {
+          "repository": "https://github.com/kubescape/regolibrary",
+          "ref": "01f57decc4a771facfb7166f02af986ccb560203",
+          "control_id": "C-0030",
+          "rule_name": "ingress-and-egress-blocked"
+        },
+        "rationale": "The upstream rule establishes the Kubernetes network-policy pattern; the local rule reports workloads not selected by both ingress and egress policy."
+      },
+      "ism_controls": [
+        {
+          "ism_id": "ISM-1182",
+          "title": "Network access controls are implemented to limit the flow of network traffic within and between network segments to only that required for business purposes.",
+          "coverage": "partial",
+          "evidence_note": "Findings show whether Kubernetes workloads are selected by ingress and egress NetworkPolicies; they do not prove that allowed flows match business need or that the cluster network plugin enforces the policies."
+        },
+        {
+          "ism_id": "ISM-1416",
+          "title": "A software firewall is implemented on workstations and servers to restrict inbound and outbound network connections to an organisation-approved set of applications and services.",
+          "coverage": "partial",
+          "evidence_note": "NetworkPolicy coverage is evidence of workload-level traffic restriction only; it does not prove host firewall coverage, approved application and service lists, or effective enforcement by the cluster network plugin."
+        }
+      ]
+    },
+    {
+      "rule_id": "ism-no-cluster-admin-binding",
+      "provenance": {
+        "disposition": "adapt",
+        "upstream": {
+          "repository": "https://github.com/kubescape/regolibrary",
+          "ref": "01f57decc4a771facfb7166f02af986ccb560203",
+          "control_id": "C-0185",
+          "rule_name": "cluster-admin-role"
+        },
+        "rationale": "The upstream aggregated rule covers all bound subjects; the standalone local rule applies the same subject scope directly to RBAC bindings."
+      },
+      "ism_controls": [
+        {
+          "ism_id": "ISM-1883",
+          "title": "Privileged user accounts explicitly authorised to access online services are strictly limited to only what is required for users and services to undertake their duties.",
+          "coverage": "partial",
+          "evidence_note": "RBAC and service-account findings show Kubernetes privilege breadth; they do not prove authorisation workflow, human account lifecycle or external systems."
+        }
+      ]
+    },
+    {
+      "rule_id": "ism-no-host-access",
+      "provenance": {
+        "disposition": "custom",
+        "rationale": "The rule combines host namespace, host port and hostPath checks that are separate controls upstream, so no single upstream control is authoritative."
+      },
+      "ism_controls": [
+        {
+          "ism_id": "ISM-1246",
+          "title": "Server applications are hardened using ASD and vendor hardening guidance, with the most restrictive guidance taking precedence when conflicts occur.",
+          "coverage": "partial",
+          "evidence_note": "Findings show selected Kubernetes workload hardening settings; they do not prove that all ASD and vendor guidance was identified, reconciled or implemented."
+        },
+        {
+          "ism_id": "ISM-1604",
+          "title": "When using a software-based isolation mechanism that consumes shared physical computing resources, the configuration of the isolation mechanism is hardened by removing unneeded functionality and restricting access to the administrative interface used to manage the isolation mechanism.",
+          "coverage": "partial",
+          "evidence_note": "Findings show selected container isolation and workload hardening settings; they do not assess the Kubernetes control plane, node runtime configuration or every administrative interface used to manage the isolation mechanism."
+        }
+      ]
+    },
+    {
+      "rule_id": "ism-no-privilege-escalation",
+      "provenance": {
+        "disposition": "adapt",
+        "upstream": {
+          "repository": "https://github.com/kubescape/regolibrary",
+          "ref": "01f57decc4a771facfb7166f02af986ccb560203",
+          "control_id": "C-0016",
+          "rule_name": "rule-allow-privilege-escalation"
+        },
+        "rationale": "The local rule applies the upstream explicit-false requirement to regular and init containers."
+      },
+      "ism_controls": [
+        {
+          "ism_id": "ISM-1246",
+          "title": "Server applications are hardened using ASD and vendor hardening guidance, with the most restrictive guidance taking precedence when conflicts occur.",
+          "coverage": "partial",
+          "evidence_note": "Findings show selected Kubernetes workload hardening settings; they do not prove that all ASD and vendor guidance was identified, reconciled or implemented."
+        },
+        {
+          "ism_id": "ISM-1604",
+          "title": "When using a software-based isolation mechanism that consumes shared physical computing resources, the configuration of the isolation mechanism is hardened by removing unneeded functionality and restricting access to the administrative interface used to manage the isolation mechanism.",
+          "coverage": "partial",
+          "evidence_note": "Findings show selected container isolation and workload hardening settings; they do not assess the Kubernetes control plane, node runtime configuration or every administrative interface used to manage the isolation mechanism."
+        }
+      ]
+    },
+    {
+      "rule_id": "ism-no-privileged-containers",
+      "provenance": {
+        "disposition": "adapt",
+        "upstream": {
+          "repository": "https://github.com/kubescape/regolibrary",
+          "ref": "01f57decc4a771facfb7166f02af986ccb560203",
+          "control_id": "C-0057",
+          "rule_name": "rule-privilege-escalation"
+        },
+        "rationale": "The local rule follows the upstream privileged and SYS_ADMIN checks and adds standalone fixtures for regular and init containers."
+      },
+      "ism_controls": [
+        {
+          "ism_id": "ISM-1246",
+          "title": "Server applications are hardened using ASD and vendor hardening guidance, with the most restrictive guidance taking precedence when conflicts occur.",
+          "coverage": "partial",
+          "evidence_note": "Findings show selected Kubernetes workload hardening settings; they do not prove that all ASD and vendor guidance was identified, reconciled or implemented."
+        },
+        {
+          "ism_id": "ISM-1490",
+          "title": "Application control is implemented on internet-facing servers.",
+          "coverage": "partial",
+          "evidence_note": "Scan and PolicyReport results show workload image and execution guardrails on Kubernetes servers; they do not prove host or endpoint application control."
+        },
+        {
+          "ism_id": "ISM-1604",
+          "title": "When using a software-based isolation mechanism that consumes shared physical computing resources, the configuration of the isolation mechanism is hardened by removing unneeded functionality and restricting access to the administrative interface used to manage the isolation mechanism.",
+          "coverage": "partial",
+          "evidence_note": "Findings show selected container isolation and workload hardening settings; they do not assess the Kubernetes control plane, node runtime configuration or every administrative interface used to manage the isolation mechanism."
+        },
+        {
+          "ism_id": "ISM-1657",
+          "title": "Application control restricts the execution of executables, libraries, scripts, installers, compiled HTML, HTML applications and control panel applets to an organisation-approved set.",
+          "coverage": "partial",
+          "evidence_note": "Approved-image and workload-execution findings evidence the Kubernetes translation of application control; they do not inspect binaries inside images."
+        },
+        {
+          "ism_id": "ISM-1871",
+          "title": "Application control is applied to all locations other than user profiles and temporary folders used by operating systems, web browsers and email clients.",
+          "coverage": "partial",
+          "evidence_note": "Cluster-wide workload findings show whether the Kubernetes translation is applied across scanned namespaces; they do not assess host filesystem locations."
+        }
+      ]
+    },
+    {
+      "rule_id": "ism-no-wildcard-permissions",
+      "provenance": {
+        "disposition": "custom",
+        "rationale": "Kubescape control C-0187 currently points to a cluster-admin enumeration rule rather than a rule dedicated to wildcard RBAC fields."
+      },
+      "ism_controls": [
+        {
+          "ism_id": "ISM-1883",
+          "title": "Privileged user accounts explicitly authorised to access online services are strictly limited to only what is required for users and services to undertake their duties.",
+          "coverage": "partial",
+          "evidence_note": "RBAC and service-account findings show Kubernetes privilege breadth; they do not prove authorisation workflow, human account lifecycle or external systems."
+        }
+      ]
+    },
+    {
+      "rule_id": "ism-non-root-containers",
+      "provenance": {
+        "disposition": "adapt",
+        "upstream": {
+          "repository": "https://github.com/kubescape/regolibrary",
+          "ref": "01f57decc4a771facfb7166f02af986ccb560203",
+          "control_id": "C-0013",
+          "rule_name": "non-root-containers"
+        },
+        "rationale": "The local rule retains the upstream non-root intent while evaluating pod and container security contexts directly."
+      },
+      "ism_controls": [
+        {
+          "ism_id": "ISM-1246",
+          "title": "Server applications are hardened using ASD and vendor hardening guidance, with the most restrictive guidance taking precedence when conflicts occur.",
+          "coverage": "partial",
+          "evidence_note": "Findings show selected Kubernetes workload hardening settings; they do not prove that all ASD and vendor guidance was identified, reconciled or implemented."
+        },
+        {
+          "ism_id": "ISM-1604",
+          "title": "When using a software-based isolation mechanism that consumes shared physical computing resources, the configuration of the isolation mechanism is hardened by removing unneeded functionality and restricting access to the administrative interface used to manage the isolation mechanism.",
+          "coverage": "partial",
+          "evidence_note": "Findings show selected container isolation and workload hardening settings; they do not assess the Kubernetes control plane, node runtime configuration or every administrative interface used to manage the isolation mechanism."
+        }
+      ]
+    },
+    {
+      "rule_id": "ism-pod-security-standards",
+      "provenance": {
+        "disposition": "custom",
+        "rationale": "No single upstream control checks namespace Pod Security Admission or an equivalent enforced Kyverno policy set."
+      },
+      "ism_controls": [
+        {
+          "ism_id": "ISM-1246",
+          "title": "Server applications are hardened using ASD and vendor hardening guidance, with the most restrictive guidance taking precedence when conflicts occur.",
+          "coverage": "partial",
+          "evidence_note": "Findings show selected Kubernetes workload hardening settings; they do not prove that all ASD and vendor guidance was identified, reconciled or implemented."
+        },
+        {
+          "ism_id": "ISM-1490",
+          "title": "Application control is implemented on internet-facing servers.",
+          "coverage": "partial",
+          "evidence_note": "Scan and PolicyReport results show workload image and execution guardrails on Kubernetes servers; they do not prove host or endpoint application control."
+        },
+        {
+          "ism_id": "ISM-1604",
+          "title": "When using a software-based isolation mechanism that consumes shared physical computing resources, the configuration of the isolation mechanism is hardened by removing unneeded functionality and restricting access to the administrative interface used to manage the isolation mechanism.",
+          "coverage": "partial",
+          "evidence_note": "Findings show selected container isolation and workload hardening settings; they do not assess the Kubernetes control plane, node runtime configuration or every administrative interface used to manage the isolation mechanism."
+        },
+        {
+          "ism_id": "ISM-1657",
+          "title": "Application control restricts the execution of executables, libraries, scripts, installers, compiled HTML, HTML applications and control panel applets to an organisation-approved set.",
+          "coverage": "partial",
+          "evidence_note": "Approved-image and workload-execution findings evidence the Kubernetes translation of application control; they do not inspect binaries inside images."
+        },
+        {
+          "ism_id": "ISM-1871",
+          "title": "Application control is applied to all locations other than user profiles and temporary folders used by operating systems, web browsers and email clients.",
+          "coverage": "partial",
+          "evidence_note": "Cluster-wide workload findings show whether the Kubernetes translation is applied across scanned namespaces; they do not assess host filesystem locations."
+        }
+      ]
+    },
+    {
+      "rule_id": "ism-readonly-root-filesystem",
+      "provenance": {
+        "disposition": "adapt",
+        "upstream": {
+          "repository": "https://github.com/kubescape/regolibrary",
+          "ref": "01f57decc4a771facfb7166f02af986ccb560203",
+          "control_id": "C-0017",
+          "rule_name": "immutable-container-filesystem"
+        },
+        "rationale": "The upstream rule provides the default-deny field check; the local rule also covers init containers and excludes Kubernetes system namespaces."
+      },
+      "ism_controls": [
+        {
+          "ism_id": "ISM-1246",
+          "title": "Server applications are hardened using ASD and vendor hardening guidance, with the most restrictive guidance taking precedence when conflicts occur.",
+          "coverage": "partial",
+          "evidence_note": "Findings show selected Kubernetes workload hardening settings; they do not prove that all ASD and vendor guidance was identified, reconciled or implemented."
+        },
+        {
+          "ism_id": "ISM-1604",
+          "title": "When using a software-based isolation mechanism that consumes shared physical computing resources, the configuration of the isolation mechanism is hardened by removing unneeded functionality and restricting access to the administrative interface used to manage the isolation mechanism.",
+          "coverage": "partial",
+          "evidence_note": "Findings show selected container isolation and workload hardening settings; they do not assess the Kubernetes control plane, node runtime configuration or every administrative interface used to manage the isolation mechanism."
+        }
+      ]
+    },
+    {
+      "rule_id": "ism-seccomp-profile",
+      "provenance": {
+        "disposition": "adapt",
+        "upstream": {
+          "repository": "https://github.com/kubescape/regolibrary",
+          "ref": "01f57decc4a771facfb7166f02af986ccb560203",
+          "control_id": "C-0055",
+          "rule_name": "linux-hardening"
+        },
+        "rationale": "The local rule extracts the seccomp portion of the upstream Linux hardening control and checks pod and container security contexts."
+      },
+      "ism_controls": [
+        {
+          "ism_id": "ISM-1246",
+          "title": "Server applications are hardened using ASD and vendor hardening guidance, with the most restrictive guidance taking precedence when conflicts occur.",
+          "coverage": "partial",
+          "evidence_note": "Findings show selected Kubernetes workload hardening settings; they do not prove that all ASD and vendor guidance was identified, reconciled or implemented."
+        },
+        {
+          "ism_id": "ISM-1604",
+          "title": "When using a software-based isolation mechanism that consumes shared physical computing resources, the configuration of the isolation mechanism is hardened by removing unneeded functionality and restricting access to the administrative interface used to manage the isolation mechanism.",
+          "coverage": "partial",
+          "evidence_note": "Findings show selected container isolation and workload hardening settings; they do not assess the Kubernetes control plane, node runtime configuration or every administrative interface used to manage the isolation mechanism."
+        }
+      ]
+    }
+  ],
+  "excluded_unmapped_rules": []
+}

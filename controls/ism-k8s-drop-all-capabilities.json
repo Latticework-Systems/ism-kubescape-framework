@@ -1,0 +1,45 @@
+{
+  "controlID": "ISM-K8S-DROP-ALL-CAPABILITIES",
+  "name": "Drop all capabilities",
+  "description": "Fail containers that do not drop all Linux capabilities.",
+  "long_description": "ISM-1246 (partial): Findings show selected Kubernetes workload hardening settings; they do not prove that all ASD and vendor guidance was identified, reconciled or implemented. ISM-1604 (partial): Findings show selected container isolation and workload hardening settings; they do not assess the Kubernetes control plane, node runtime configuration or every administrative interface used to manage the isolation mechanism.",
+  "remediation": "Set securityContext.capabilities.drop=[ALL] and add back only capabilities with a documented need.",
+  "rulesNames": [
+    "ism-drop-all-capabilities"
+  ],
+  "references": [
+    "https://www.cyber.gov.au/ism/oscal/latest-version/artifacts/ISM_catalog.json",
+    "https://github.com/kubescape/regolibrary/tree/01f57decc4a771facfb7166f02af986ccb560203"
+  ],
+  "attributes": {
+    "controlTypeTags": [
+      "compliance"
+    ],
+    "ismControls": [
+      "ISM-1246",
+      "ISM-1604"
+    ],
+    "mappingRelease": "2026-06",
+    "mappingSourceSha256": "55481829a5725bdbd6b840940a5eabf2c4f8e36e163ca30ab0338f32c5cc7bdb",
+    "provenance": {
+      "disposition": "adapt",
+      "upstream": {
+        "repository": "https://github.com/kubescape/regolibrary",
+        "ref": "01f57decc4a771facfb7166f02af986ccb560203",
+        "control_id": "C-0046",
+        "rule_name": "insecure-capabilities"
+      },
+      "rationale": "The local rule uses the upstream capability model but requires every regular and init container to drop ALL capabilities."
+    }
+  },
+  "baseScore": 7.0,
+  "category": {
+    "name": "Workload"
+  },
+  "scanningScope": {
+    "matches": [
+      "cluster",
+      "file"
+    ]
+  }
+}

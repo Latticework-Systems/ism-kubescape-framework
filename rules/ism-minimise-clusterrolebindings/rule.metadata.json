@@ -1,0 +1,30 @@
+{
+  "name": "ism-minimise-clusterrolebindings",
+  "attributes": {
+    "ismControls": [
+      "ISM-1883"
+    ],
+    "provenance": {
+      "disposition": "custom",
+      "rationale": "Upstream administrative-role controls identify cluster-admin-equivalent access, not every non-system cluster-wide service-account binding."
+    }
+  },
+  "ruleLanguage": "Rego",
+  "match": [
+    {
+      "apiGroups": [
+        "rbac.authorization.k8s.io"
+      ],
+      "apiVersions": [
+        "v1"
+      ],
+      "resources": [
+        "ClusterRoleBinding"
+      ]
+    }
+  ],
+  "ruleDependencies": [],
+  "description": "Fail non-system ClusterRoleBindings that grant cluster-wide roles to service accounts.",
+  "remediation": "Replace service-account ClusterRoleBindings with namespace-scoped RoleBindings where possible, or document why cluster-wide access is required.",
+  "ruleQuery": "armo_builtins"
+}

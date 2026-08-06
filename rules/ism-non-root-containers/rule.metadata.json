@@ -1,0 +1,63 @@
+{
+  "name": "ism-non-root-containers",
+  "attributes": {
+    "ismControls": [
+      "ISM-1246",
+      "ISM-1604"
+    ],
+    "provenance": {
+      "disposition": "adapt",
+      "upstream": {
+        "repository": "https://github.com/kubescape/regolibrary",
+        "ref": "01f57decc4a771facfb7166f02af986ccb560203",
+        "control_id": "C-0013",
+        "rule_name": "non-root-containers"
+      },
+      "rationale": "The local rule retains the upstream non-root intent while evaluating pod and container security contexts directly."
+    }
+  },
+  "ruleLanguage": "Rego",
+  "match": [
+    {
+      "apiGroups": [
+        ""
+      ],
+      "apiVersions": [
+        "v1"
+      ],
+      "resources": [
+        "Pod"
+      ]
+    },
+    {
+      "apiGroups": [
+        "apps"
+      ],
+      "apiVersions": [
+        "v1"
+      ],
+      "resources": [
+        "Deployment",
+        "ReplicaSet",
+        "DaemonSet",
+        "StatefulSet"
+      ]
+    },
+    {
+      "apiGroups": [
+        "batch"
+      ],
+      "apiVersions": [
+        "*"
+      ],
+      "resources": [
+        "Job",
+        "CronJob"
+      ]
+    }
+  ],
+  "ruleDependencies": [],
+  "description": "Fail containers that are not explicitly required to run as non-root.",
+  "remediation": "Set runAsNonRoot=true in each container securityContext or the pod securityContext.",
+  "ruleQuery": "armo_builtins"
+}

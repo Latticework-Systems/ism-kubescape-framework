@@ -1,0 +1,34 @@
+{
+  "name": "ism-pod-security-standards",
+  "attributes": {
+    "ismControls": [
+      "ISM-1246",
+      "ISM-1490",
+      "ISM-1604",
+      "ISM-1657",
+      "ISM-1871"
+    ],
+    "provenance": {
+      "disposition": "custom",
+      "rationale": "No single upstream control checks namespace Pod Security Admission or an equivalent enforced Kyverno policy set."
+    }
+  },
+  "ruleLanguage": "Rego",
+  "match": [
+    {
+      "apiGroups": [
+        ""
+      ],
+      "apiVersions": [
+        "v1"
+      ],
+      "resources": [
+        "Namespace"
+      ]
+    }
+  ],
+  "ruleDependencies": [],
+  "description": "Fail workload namespaces that do not enforce the restricted Pod Security Standard.",
+  "remediation": "Set pod-security.kubernetes.io/enforce=restricted on workload namespaces.",
+  "ruleQuery": "armo_builtins"
+}

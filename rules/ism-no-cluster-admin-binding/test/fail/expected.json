@@ -1,0 +1,6 @@
+{
+  "count": 1,
+  "alerts": [
+    "ClusterRoleBinding 'workload-admin' grants cluster-admin to ServiceAccount 'prod/api'"
+  ]
+}

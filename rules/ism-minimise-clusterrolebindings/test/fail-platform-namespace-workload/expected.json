@@ -1,0 +1,6 @@
+{
+  "count": 1,
+  "alerts": [
+    "ClusterRoleBinding 'monitoring-api-global' grants cluster-wide access to service account 'monitoring/api'"
+  ]
+}

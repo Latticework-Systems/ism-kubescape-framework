@@ -1,0 +1,44 @@
+{
+  "controlID": "ISM-K8S-NO-CLUSTER-ADMIN-BINDING",
+  "name": "No cluster admin binding",
+  "description": "Fail RBAC bindings that grant the cluster-admin ClusterRole to any subject.",
+  "long_description": "ISM-1883 (partial): RBAC and service-account findings show Kubernetes privilege breadth; they do not prove authorisation workflow, human account lifecycle or external systems.",
+  "remediation": "Remove cluster-admin and use a narrowly scoped Role or ClusterRole; review emergency access through the downstream exception process.",
+  "rulesNames": [
+    "ism-no-cluster-admin-binding"
+  ],
+  "references": [
+    "https://www.cyber.gov.au/ism/oscal/latest-version/artifacts/ISM_catalog.json",
+    "https://github.com/kubescape/regolibrary/tree/01f57decc4a771facfb7166f02af986ccb560203"
+  ],
+  "attributes": {
+    "controlTypeTags": [
+      "compliance"
+    ],
+    "ismControls": [
+      "ISM-1883"
+    ],
+    "mappingRelease": "2026-06",
+    "mappingSourceSha256": "55481829a5725bdbd6b840940a5eabf2c4f8e36e163ca30ab0338f32c5cc7bdb",
+    "provenance": {
+      "disposition": "adapt",
+      "upstream": {
+        "repository": "https://github.com/kubescape/regolibrary",
+        "ref": "01f57decc4a771facfb7166f02af986ccb560203",
+        "control_id": "C-0185",
+        "rule_name": "cluster-admin-role"
+      },
+      "rationale": "The upstream aggregated rule covers all bound subjects; the standalone local rule applies the same subject scope directly to RBAC bindings."
+    }
+  },
+  "baseScore": 9.0,
+  "category": {
+    "name": "Access control"
+  },
+  "scanningScope": {
+    "matches": [
+      "cluster",
+      "file"
+    ]
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "controlID": "ISM-K8S-NO-WILDCARD-PERMISSIONS",
+  "name": "No wildcard permissions",
+  "description": "Fail Roles and ClusterRoles that use wildcard apiGroups, resources, or verbs.",
+  "long_description": "ISM-1883 (partial): RBAC and service-account findings show Kubernetes privilege breadth; they do not prove authorisation workflow, human account lifecycle or external systems.",
+  "remediation": "Replace wildcard permissions with explicit resources, apiGroups, and verbs.",
+  "rulesNames": [
+    "ism-no-wildcard-permissions"
+  ],
+  "references": [
+    "https://www.cyber.gov.au/ism/oscal/latest-version/artifacts/ISM_catalog.json"
+  ],
+  "attributes": {
+    "controlTypeTags": [
+      "compliance"
+    ],
+    "ismControls": [
+      "ISM-1883"
+    ],
+    "mappingRelease": "2026-06",
+    "mappingSourceSha256": "55481829a5725bdbd6b840940a5eabf2c4f8e36e163ca30ab0338f32c5cc7bdb",
+    "provenance": {
+      "disposition": "custom",
+      "rationale": "Kubescape control C-0187 currently points to a cluster-admin enumeration rule rather than a rule dedicated to wildcard RBAC fields."
+    }
+  },
+  "baseScore": 8.0,
+  "category": {
+    "name": "Access control"
+  },
+  "scanningScope": {
+    "matches": [
+      "cluster",
+      "file"
+    ]
+  }
+}

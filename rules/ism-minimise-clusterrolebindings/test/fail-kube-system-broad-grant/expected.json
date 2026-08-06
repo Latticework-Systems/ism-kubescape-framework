@@ -1,0 +1,6 @@
+{
+  "count": 1,
+  "alerts": [
+    "ClusterRoleBinding 'attacker-edit' grants cluster-wide access to service account 'kube-system/attacker'"
+  ]
+}

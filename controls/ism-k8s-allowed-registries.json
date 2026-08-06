@@ -1,0 +1,46 @@
+{
+  "controlID": "ISM-K8S-ALLOWED-REGISTRIES",
+  "name": "Allowed registries",
+  "description": "Fail workloads that pull images from registries or repositories outside the approved allow list.",
+  "long_description": "ISM-1490 (partial): Scan and PolicyReport results show workload image and execution guardrails on Kubernetes servers; they do not prove host or endpoint application control. ISM-1657 (partial): Approved-image and workload-execution findings evidence the Kubernetes translation of application control; they do not inspect binaries inside images. ISM-1871 (partial): Cluster-wide workload findings show whether the Kubernetes translation is applied across scanned namespaces; they do not assess host filesystem locations.",
+  "remediation": "Use an approved registry and provide the allow list through posture control inputs or the guided scan's cluster-managed registry ConfigMap.",
+  "rulesNames": [
+    "ism-allowed-registries"
+  ],
+  "references": [
+    "https://www.cyber.gov.au/ism/oscal/latest-version/artifacts/ISM_catalog.json",
+    "https://github.com/kubescape/regolibrary/tree/01f57decc4a771facfb7166f02af986ccb560203"
+  ],
+  "attributes": {
+    "controlTypeTags": [
+      "compliance"
+    ],
+    "ismControls": [
+      "ISM-1490",
+      "ISM-1657",
+      "ISM-1871"
+    ],
+    "mappingRelease": "2026-06",
+    "mappingSourceSha256": "55481829a5725bdbd6b840940a5eabf2c4f8e36e163ca30ab0338f32c5cc7bdb",
+    "provenance": {
+      "disposition": "adapt",
+      "upstream": {
+        "repository": "https://github.com/kubescape/regolibrary",
+        "ref": "01f57decc4a771facfb7166f02af986ccb560203",
+        "control_id": "C-0078",
+        "rule_name": "container-image-repository-v1"
+      },
+      "rationale": "The upstream rule provides the base allow-list behaviour; the local implementation also accepts the public Kyverno registry ConfigMap."
+    }
+  },
+  "baseScore": 7.0,
+  "category": {
+    "name": "Workload"
+  },
+  "scanningScope": {
+    "matches": [
+      "cluster",
+      "file"
+    ]
+  }
+}

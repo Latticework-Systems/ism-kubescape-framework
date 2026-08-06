@@ -1,0 +1,13 @@
+dist/
+evidence/
+.claude/
+.DS_Store
+__pycache__/
+*.pyc
+
+# Screen recordings of a scan routinely capture kubeconfigs, tokens, and
+# cluster output. Keep them out of the repository by default.
+*.mp4
+*.mov
+*.m4v
+*.avi

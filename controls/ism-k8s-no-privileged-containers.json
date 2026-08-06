@@ -1,0 +1,48 @@
+{
+  "controlID": "ISM-K8S-NO-PRIVILEGED-CONTAINERS",
+  "name": "No privileged containers",
+  "description": "Fail workloads that run privileged containers or add the SYS_ADMIN capability.",
+  "long_description": "ISM-1246 (partial): Findings show selected Kubernetes workload hardening settings; they do not prove that all ASD and vendor guidance was identified, reconciled or implemented. ISM-1490 (partial): Scan and PolicyReport results show workload image and execution guardrails on Kubernetes servers; they do not prove host or endpoint application control. ISM-1604 (partial): Findings show selected container isolation and workload hardening settings; they do not assess the Kubernetes control plane, node runtime configuration or every administrative interface used to manage the isolation mechanism. ISM-1657 (partial): Approved-image and workload-execution findings evidence the Kubernetes translation of application control; they do not inspect binaries inside images. ISM-1871 (partial): Cluster-wide workload findings show whether the Kubernetes translation is applied across scanned namespaces; they do not assess host filesystem locations.",
+  "remediation": "Remove privileged mode and drop SYS_ADMIN unless it is explicitly required.",
+  "rulesNames": [
+    "ism-no-privileged-containers"
+  ],
+  "references": [
+    "https://www.cyber.gov.au/ism/oscal/latest-version/artifacts/ISM_catalog.json",
+    "https://github.com/kubescape/regolibrary/tree/01f57decc4a771facfb7166f02af986ccb560203"
+  ],
+  "attributes": {
+    "controlTypeTags": [
+      "compliance"
+    ],
+    "ismControls": [
+      "ISM-1246",
+      "ISM-1490",
+      "ISM-1604",
+      "ISM-1657",
+      "ISM-1871"
+    ],
+    "mappingRelease": "2026-06",
+    "mappingSourceSha256": "55481829a5725bdbd6b840940a5eabf2c4f8e36e163ca30ab0338f32c5cc7bdb",
+    "provenance": {
+      "disposition": "adapt",
+      "upstream": {
+        "repository": "https://github.com/kubescape/regolibrary",
+        "ref": "01f57decc4a771facfb7166f02af986ccb560203",
+        "control_id": "C-0057",
+        "rule_name": "rule-privilege-escalation"
+      },
+      "rationale": "The local rule follows the upstream privileged and SYS_ADMIN checks and adds standalone fixtures for regular and init containers."
+    }
+  },
+  "baseScore": 9.0,
+  "category": {
+    "name": "Workload"
+  },
+  "scanningScope": {
+    "matches": [
+      "cluster",
+      "file"
+    ]
+  }
+}

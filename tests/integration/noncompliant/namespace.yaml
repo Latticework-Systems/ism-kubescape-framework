@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: production
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ism-approved-registries
+  namespace: kyverno
+data:
+  registries: |
+    registry.internal/*
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+  namespace: production
+spec:
+  selector:
+    matchLabels:
+      app: api
+  template:
+    metadata:
+      labels:
+        app: api
+    spec:
+      hostNetwork: true
+      containers:
+        - name: api
+          image: docker.io/library/nginx:latest
+          securityContext:
+            privileged: true
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: prod-api-admin
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+  - kind: ServiceAccount
+    name: api
+    namespace: production
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: prod-wildcard
+rules:
+  - apiGroups: ["*"]
+    resources: ["pods"]
+    verbs: ["*"]

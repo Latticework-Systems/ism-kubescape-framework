@@ -1,0 +1,27 @@
+[
+  {
+    "apiVersion": "apps/v1",
+    "kind": "Deployment",
+    "metadata": {
+      "name": "api",
+      "namespace": "prod"
+    },
+    "spec": {
+      "template": {
+        "metadata": {
+          "labels": {
+            "app": "api"
+          }
+        },
+        "spec": {
+          "containers": [
+            {
+              "name": "api",
+              "image": "registry.internal/app:v1"
+            }
+          ]
+        }
+      }
+    }
+  }
+]

@@ -1,0 +1,7 @@
+{
+  "count": 2,
+  "alerts": [
+    "ClusterRoleBinding 'istio-cni-evil' grants cluster-wide access to service account 'istio-system/attacker'",
+    "ClusterRoleBinding 'kyverno:evil' grants cluster-wide access to service account 'kyverno/attacker'"
+  ]
+}

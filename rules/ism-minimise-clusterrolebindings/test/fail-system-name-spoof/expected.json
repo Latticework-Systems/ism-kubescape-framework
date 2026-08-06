@@ -1,0 +1,6 @@
+{
+  "count": 1,
+  "alerts": [
+    "ClusterRoleBinding 'system:totally-legit' grants cluster-wide access to service account 'prod/attacker'"
+  ]
+}

@@ -1,0 +1,21 @@
+[
+  {
+    "apiVersion": "v1",
+    "kind": "Pod",
+    "metadata": {
+      "name": "privileged-pod",
+      "namespace": "prod"
+    },
+    "spec": {
+      "containers": [
+        {
+          "name": "api",
+          "image": "registry.internal/app:v1",
+          "securityContext": {
+            "privileged": true
+          }
+        }
+      ]
+    }
+  }
+]

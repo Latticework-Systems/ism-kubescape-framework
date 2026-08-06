@@ -1,0 +1,60 @@
+{
+  "name": "ism-kubernetes",
+  "description": "Standalone Kubernetes-observable controls mapped to the Australian Signals Directorate Information Security Manual.",
+  "attributes": {
+    "frameworkOwner": "Latticework Systems",
+    "frameworkVersion": "0.1.0",
+    "mappingRelease": "2026-06",
+    "mappingSourceSha256": "55481829a5725bdbd6b840940a5eabf2c4f8e36e163ca30ab0338f32c5cc7bdb"
+  },
+  "scanningScope": {
+    "matches": [
+      "cluster",
+      "file"
+    ]
+  },
+  "typeTags": [
+    "compliance"
+  ],
+  "activeControls": [
+    {
+      "controlID": "ISM-K8S-ALLOWED-REGISTRIES"
+    },
+    {
+      "controlID": "ISM-K8S-DROP-ALL-CAPABILITIES"
+    },
+    {
+      "controlID": "ISM-K8S-MINIMISE-CLUSTERROLEBINDINGS"
+    },
+    {
+      "controlID": "ISM-K8S-NETWORK-POLICY-COVERAGE"
+    },
+    {
+      "controlID": "ISM-K8S-NO-CLUSTER-ADMIN-BINDING"
+    },
+    {
+      "controlID": "ISM-K8S-NO-HOST-ACCESS"
+    },
+    {
+      "controlID": "ISM-K8S-NO-PRIVILEGE-ESCALATION"
+    },
+    {
+      "controlID": "ISM-K8S-NO-PRIVILEGED-CONTAINERS"
+    },
+    {
+      "controlID": "ISM-K8S-NO-WILDCARD-PERMISSIONS"
+    },
+    {
+      "controlID": "ISM-K8S-NON-ROOT-CONTAINERS"
+    },
+    {
+      "controlID": "ISM-K8S-POD-SECURITY-STANDARDS"
+    },
+    {
+      "controlID": "ISM-K8S-READONLY-ROOT-FILESYSTEM"
+    },
+    {
+      "controlID": "ISM-K8S-SECCOMP-PROFILE"
+    }
+  ]
+}

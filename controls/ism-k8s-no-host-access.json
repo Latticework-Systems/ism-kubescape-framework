@@ -1,0 +1,38 @@
+{
+  "controlID": "ISM-K8S-NO-HOST-ACCESS",
+  "name": "No host access",
+  "description": "Fail workloads using host namespaces, hostPath volumes or host ports.",
+  "long_description": "ISM-1246 (partial): Findings show selected Kubernetes workload hardening settings; they do not prove that all ASD and vendor guidance was identified, reconciled or implemented. ISM-1604 (partial): Findings show selected container isolation and workload hardening settings; they do not assess the Kubernetes control plane, node runtime configuration or every administrative interface used to manage the isolation mechanism.",
+  "remediation": "Remove hostNetwork, hostPID, hostIPC, hostPath and hostPort access unless separately risk accepted.",
+  "rulesNames": [
+    "ism-no-host-access"
+  ],
+  "references": [
+    "https://www.cyber.gov.au/ism/oscal/latest-version/artifacts/ISM_catalog.json"
+  ],
+  "attributes": {
+    "controlTypeTags": [
+      "compliance"
+    ],
+    "ismControls": [
+      "ISM-1246",
+      "ISM-1604"
+    ],
+    "mappingRelease": "2026-06",
+    "mappingSourceSha256": "55481829a5725bdbd6b840940a5eabf2c4f8e36e163ca30ab0338f32c5cc7bdb",
+    "provenance": {
+      "disposition": "custom",
+      "rationale": "The rule combines host namespace, host port and hostPath checks that are separate controls upstream, so no single upstream control is authoritative."
+    }
+  },
+  "baseScore": 8.0,
+  "category": {
+    "name": "Workload"
+  },
+  "scanningScope": {
+    "matches": [
+      "cluster",
+      "file"
+    ]
+  }
+}

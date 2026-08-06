@@ -1,0 +1,6 @@
+{
+  "count": 1,
+  "alerts": [
+    "ClusterRoleBinding 'prod-api-global' grants cluster-wide access to service account 'prod/api'"
+  ]
+}

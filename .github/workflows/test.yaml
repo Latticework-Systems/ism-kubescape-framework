@@ -1,0 +1,62 @@
+name: test
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  unit-and-integration:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: "3.12"
+
+      - name: Run guided workflow smoke test
+        run: make smoke
+
+      - name: Install OPA
+        run: |
+          set -euo pipefail
+          OPA_VERSION=v1.18.2
+          OPA_PATH="$RUNNER_TEMP/bin/opa"
+          mkdir -p "$RUNNER_TEMP/bin"
+          curl --fail --show-error --silent --location --proto '=https' --tlsv1.2 \
+            --output "$OPA_PATH" \
+            "https://github.com/open-policy-agent/opa/releases/download/${OPA_VERSION}/opa_linux_amd64_static"
+          printf '%s  %s\n' '9903e5125ac281104f2c4b7371d10cc3b74a98933743fcbfc174f9bf0ab20de8' "$OPA_PATH" | sha256sum --check
+          chmod 0755 "$OPA_PATH"
+          echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
+          "$OPA_PATH" version
+
+      - name: Install Kubescape
+        run: |
+          set -euo pipefail
+          KUBESCAPE_VERSION=4.0.10
+          KUBESCAPE_PATH="$RUNNER_TEMP/bin/kubescape"
+          mkdir -p "$RUNNER_TEMP/bin"
+          curl --fail --show-error --silent --location --proto '=https' --tlsv1.2 \
+            --output "$KUBESCAPE_PATH" \
+            "https://github.com/kubescape/kubescape/releases/download/v${KUBESCAPE_VERSION}/kubescape_${KUBESCAPE_VERSION}_linux_amd64"
+          printf '%s  %s\n' '7ae3dc6a639684b26bb7754bcbb372ba942f4584a88184eaa3b208e00b937241' "$KUBESCAPE_PATH" | sha256sum --check
+          chmod 0755 "$KUBESCAPE_PATH"
+          echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
+          "$KUBESCAPE_PATH" version
+
+      - name: Build bundled artifacts
+        run: |
+          make build
+          git diff --exit-code
+
+      - name: Run rule fixtures
+        run: make test
+
+      - name: Run manifest integration scans
+        run: KUBESCAPE_BIN=kubescape scripts/run_integration.sh

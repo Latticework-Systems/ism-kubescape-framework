@@ -1,0 +1,63 @@
+{
+  "name": "ism-seccomp-profile",
+  "attributes": {
+    "ismControls": [
+      "ISM-1246",
+      "ISM-1604"
+    ],
+    "provenance": {
+      "disposition": "adapt",
+      "upstream": {
+        "repository": "https://github.com/kubescape/regolibrary",
+        "ref": "01f57decc4a771facfb7166f02af986ccb560203",
+        "control_id": "C-0055",
+        "rule_name": "linux-hardening"
+      },
+      "rationale": "The local rule extracts the seccomp portion of the upstream Linux hardening control and checks pod and container security contexts."
+    }
+  },
+  "ruleLanguage": "Rego",
+  "match": [
+    {
+      "apiGroups": [
+        ""
+      ],
+      "apiVersions": [
+        "v1"
+      ],
+      "resources": [
+        "Pod"
+      ]
+    },
+    {
+      "apiGroups": [
+        "apps"
+      ],
+      "apiVersions": [
+        "v1"
+      ],
+      "resources": [
+        "Deployment",
+        "ReplicaSet",
+        "DaemonSet",
+        "StatefulSet"
+      ]
+    },
+    {
+      "apiGroups": [
+        "batch"
+      ],
+      "apiVersions": [
+        "*"
+      ],
+      "resources": [
+        "Job",
+        "CronJob"
+      ]
+    }
+  ],
+  "ruleDependencies": [],
+  "description": "Fail containers that do not use RuntimeDefault or Localhost seccomp.",
+  "remediation": "Set seccompProfile.type=RuntimeDefault at pod or container level, or use a reviewed Localhost profile.",
+  "ruleQuery": "armo_builtins"
+}

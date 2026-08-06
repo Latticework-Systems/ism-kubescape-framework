@@ -1,0 +1,127 @@
+name: Update ISM mapping
+
+on:
+  schedule:
+    - cron: "17 3 * * 1"
+  workflow_dispatch:
+    inputs:
+      controls_version:
+        description: "Controls release tag (blank uses the latest release)"
+        required: false
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          ref: main
+
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: "3.12"
+
+      - name: Install OPA
+        run: |
+          set -euo pipefail
+          OPA_VERSION=v1.18.2
+          OPA_PATH="$RUNNER_TEMP/bin/opa"
+          mkdir -p "$RUNNER_TEMP/bin"
+          curl --fail --show-error --silent --location --proto '=https' --tlsv1.2 \
+            --output "$OPA_PATH" \
+            "https://github.com/open-policy-agent/opa/releases/download/${OPA_VERSION}/opa_linux_amd64_static"
+          printf '%s  %s\n' '9903e5125ac281104f2c4b7371d10cc3b74a98933743fcbfc174f9bf0ab20de8' "$OPA_PATH" | sha256sum --check
+          chmod 0755 "$OPA_PATH"
+          echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
+
+      - name: Select controls release
+        id: release
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          REQUESTED_VERSION: ${{ inputs.controls_version }}
+        run: |
+          set -euo pipefail
+          version="$REQUESTED_VERSION"
+          if [[ -z "$version" ]]; then
+            version="$(curl --fail --silent --show-error --location \
+              -H "Authorization: Bearer $GITHUB_TOKEN" \
+              -H 'Accept: application/vnd.github+json' \
+              https://api.github.com/repos/Latticework-Systems/ism-kubernetes-controls/releases/latest | jq -r .tag_name)"
+          fi
+          # Anchor the whole tag. A prefix glob would accept quotes, semicolons,
+          # and newlines, which reach a shell and $GITHUB_OUTPUT downstream.
+          if [[ ! "$version" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Invalid controls release tag: $version" >&2
+            exit 1
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Import and validate mapping
+        env:
+          VERSION: ${{ steps.release.outputs.version }}
+        run: |
+          set -euo pipefail
+          make update-mapping CONTROLS_VERSION="$VERSION"
+
+      - name: Commit changed mapping
+        id: change
+        env:
+          VERSION: ${{ steps.release.outputs.version }}
+        run: |
+          set -euo pipefail
+          branch="automation/update-mapping-$VERSION"
+          git switch -c "$branch"
+          git add mapping controls frameworks rules
+          if git diff --cached --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Update ISM mapping to $VERSION"
+          echo "branch=$branch" >> "$GITHUB_OUTPUT"
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Push update branch
+        if: steps.change.outputs.changed == 'true'
+        env:
+          BRANCH: ${{ steps.change.outputs.branch }}
+        run: |
+          git fetch origin "$BRANCH" || true
+          git push --force-with-lease origin "HEAD:$BRANCH"
+
+      - name: Open update pull request
+        if: steps.change.outputs.changed == 'true'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          BRANCH: ${{ steps.change.outputs.branch }}
+          VERSION: ${{ steps.release.outputs.version }}
+        run: |
+          set -euo pipefail
+          existing="$(curl --fail --silent --show-error --location \
+            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            -H 'Accept: application/vnd.github+json' \
+            --get "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls" \
+            --data-urlencode "head=$GITHUB_REPOSITORY:$BRANCH" \
+            --data-urlencode 'state=open' | jq -r '.[0].number // empty')"
+          if [[ -n "$existing" ]]; then
+            echo "Pull request #$existing already exists."
+            exit 0
+          fi
+          jq -n \
+            --arg title "Update ISM mapping to $VERSION" \
+            --arg head "$BRANCH" \
+            --arg body "Automated mapping refresh from the immutable ism-kubernetes-controls release $VERSION. The update target verified the release asset checksum, regenerated the framework, and passed build and rule tests. Review the mapping and generated control changes before merging." \
+            '{title: $title, head: $head, base: "main", body: $body}' |
+            curl --fail --silent --show-error --location \
+              -X POST \
+              -H "Authorization: Bearer $GITHUB_TOKEN" \
+              -H 'Accept: application/vnd.github+json' \
+              -H 'Content-Type: application/json' \
+              --data-binary @- "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls"

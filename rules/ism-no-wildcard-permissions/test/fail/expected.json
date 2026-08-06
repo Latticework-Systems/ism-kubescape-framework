@@ -1,0 +1,7 @@
+{
+  "count": 2,
+  "alerts": [
+    "ClusterRole 'too-broad' contains wildcard RBAC permissions",
+    "ClusterRole 'too-broad' contains wildcard RBAC permissions"
+  ]
+}

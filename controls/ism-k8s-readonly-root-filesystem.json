@@ -1,0 +1,45 @@
+{
+  "controlID": "ISM-K8S-READONLY-ROOT-FILESYSTEM",
+  "name": "Readonly root filesystem",
+  "description": "Fail workloads with a mutable root filesystem.",
+  "long_description": "ISM-1246 (partial): Findings show selected Kubernetes workload hardening settings; they do not prove that all ASD and vendor guidance was identified, reconciled or implemented. ISM-1604 (partial): Findings show selected container isolation and workload hardening settings; they do not assess the Kubernetes control plane, node runtime configuration or every administrative interface used to manage the isolation mechanism.",
+  "remediation": "Set securityContext.readOnlyRootFilesystem=true for all containers and init containers.",
+  "rulesNames": [
+    "ism-readonly-root-filesystem"
+  ],
+  "references": [
+    "https://www.cyber.gov.au/ism/oscal/latest-version/artifacts/ISM_catalog.json",
+    "https://github.com/kubescape/regolibrary/tree/01f57decc4a771facfb7166f02af986ccb560203"
+  ],
+  "attributes": {
+    "controlTypeTags": [
+      "compliance"
+    ],
+    "ismControls": [
+      "ISM-1246",
+      "ISM-1604"
+    ],
+    "mappingRelease": "2026-06",
+    "mappingSourceSha256": "55481829a5725bdbd6b840940a5eabf2c4f8e36e163ca30ab0338f32c5cc7bdb",
+    "provenance": {
+      "disposition": "adapt",
+      "upstream": {
+        "repository": "https://github.com/kubescape/regolibrary",
+        "ref": "01f57decc4a771facfb7166f02af986ccb560203",
+        "control_id": "C-0017",
+        "rule_name": "immutable-container-filesystem"
+      },
+      "rationale": "The upstream rule provides the default-deny field check; the local rule also covers init containers and excludes Kubernetes system namespaces."
+    }
+  },
+  "baseScore": 7.0,
+  "category": {
+    "name": "Workload"
+  },
+  "scanningScope": {
+    "matches": [
+      "cluster",
+      "file"
+    ]
+  }
+}

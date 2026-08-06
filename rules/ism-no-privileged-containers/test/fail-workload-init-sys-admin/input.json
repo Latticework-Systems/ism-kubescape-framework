@@ -1,0 +1,45 @@
+[
+  {
+    "apiVersion": "apps/v1",
+    "kind": "Deployment",
+    "metadata": {
+      "name": "sys-admin-deployment",
+      "namespace": "prod"
+    },
+    "spec": {
+      "selector": {
+        "matchLabels": {
+          "app": "sys-admin"
+        }
+      },
+      "template": {
+        "metadata": {
+          "labels": {
+            "app": "sys-admin"
+          }
+        },
+        "spec": {
+          "initContainers": [
+            {
+              "name": "init",
+              "image": "registry.internal/init:v1",
+              "securityContext": {
+                "capabilities": {
+                  "add": [
+                    "SYS_ADMIN"
+                  ]
+                }
+              }
+            }
+          ],
+          "containers": [
+            {
+              "name": "api",
+              "image": "registry.internal/app:v1"
+            }
+          ]
+        }
+      }
+    }
+  }
+]

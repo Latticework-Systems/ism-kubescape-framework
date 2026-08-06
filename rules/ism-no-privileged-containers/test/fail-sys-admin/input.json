@@ -1,0 +1,25 @@
+[
+  {
+    "apiVersion": "v1",
+    "kind": "Pod",
+    "metadata": {
+      "name": "sys-admin-pod",
+      "namespace": "prod"
+    },
+    "spec": {
+      "containers": [
+        {
+          "name": "api",
+          "image": "registry.internal/app:v1",
+          "securityContext": {
+            "capabilities": {
+              "add": [
+                "SYS_ADMIN"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  }
+]

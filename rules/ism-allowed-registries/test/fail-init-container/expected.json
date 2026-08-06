@@ -1,0 +1,6 @@
+{
+  "count": 1,
+  "alerts": [
+    "container image 'docker.io/library/busybox:1.37' is not from an approved registry or repository"
+  ]
+}

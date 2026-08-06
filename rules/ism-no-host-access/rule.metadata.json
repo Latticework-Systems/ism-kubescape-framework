@@ -1,0 +1,57 @@
+{
+  "name": "ism-no-host-access",
+  "attributes": {
+    "ismControls": [
+      "ISM-1246",
+      "ISM-1604"
+    ],
+    "provenance": {
+      "disposition": "custom",
+      "rationale": "The rule combines host namespace, host port and hostPath checks that are separate controls upstream, so no single upstream control is authoritative."
+    }
+  },
+  "ruleLanguage": "Rego",
+  "match": [
+    {
+      "apiGroups": [
+        ""
+      ],
+      "apiVersions": [
+        "v1"
+      ],
+      "resources": [
+        "Pod"
+      ]
+    },
+    {
+      "apiGroups": [
+        "apps"
+      ],
+      "apiVersions": [
+        "v1"
+      ],
+      "resources": [
+        "Deployment",
+        "ReplicaSet",
+        "DaemonSet",
+        "StatefulSet"
+      ]
+    },
+    {
+      "apiGroups": [
+        "batch"
+      ],
+      "apiVersions": [
+        "*"
+      ],
+      "resources": [
+        "Job",
+        "CronJob"
+      ]
+    }
+  ],
+  "ruleDependencies": [],
+  "description": "Fail workloads using host namespaces, hostPath volumes or host ports.",
+  "remediation": "Remove hostNetwork, hostPID, hostIPC, hostPath and hostPort access unless separately risk accepted.",
+  "ruleQuery": "armo_builtins"
+}

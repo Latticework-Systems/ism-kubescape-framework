@@ -1,0 +1,45 @@
+{
+  "controlID": "ISM-K8S-SECCOMP-PROFILE",
+  "name": "Seccomp profile",
+  "description": "Fail containers that do not use RuntimeDefault or Localhost seccomp.",
+  "long_description": "ISM-1246 (partial): Findings show selected Kubernetes workload hardening settings; they do not prove that all ASD and vendor guidance was identified, reconciled or implemented. ISM-1604 (partial): Findings show selected container isolation and workload hardening settings; they do not assess the Kubernetes control plane, node runtime configuration or every administrative interface used to manage the isolation mechanism.",
+  "remediation": "Set seccompProfile.type=RuntimeDefault at pod or container level, or use a reviewed Localhost profile.",
+  "rulesNames": [
+    "ism-seccomp-profile"
+  ],
+  "references": [
+    "https://www.cyber.gov.au/ism/oscal/latest-version/artifacts/ISM_catalog.json",
+    "https://github.com/kubescape/regolibrary/tree/01f57decc4a771facfb7166f02af986ccb560203"
+  ],
+  "attributes": {
+    "controlTypeTags": [
+      "compliance"
+    ],
+    "ismControls": [
+      "ISM-1246",
+      "ISM-1604"
+    ],
+    "mappingRelease": "2026-06",
+    "mappingSourceSha256": "55481829a5725bdbd6b840940a5eabf2c4f8e36e163ca30ab0338f32c5cc7bdb",
+    "provenance": {
+      "disposition": "adapt",
+      "upstream": {
+        "repository": "https://github.com/kubescape/regolibrary",
+        "ref": "01f57decc4a771facfb7166f02af986ccb560203",
+        "control_id": "C-0055",
+        "rule_name": "linux-hardening"
+      },
+      "rationale": "The local rule extracts the seccomp portion of the upstream Linux hardening control and checks pod and container security contexts."
+    }
+  },
+  "baseScore": 7.0,
+  "category": {
+    "name": "Workload"
+  },
+  "scanningScope": {
+    "matches": [
+      "cluster",
+      "file"
+    ]
+  }
+}

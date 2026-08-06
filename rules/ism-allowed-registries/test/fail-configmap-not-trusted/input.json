@@ -1,0 +1,43 @@
+[
+  {
+    "apiVersion": "v1",
+    "kind": "ConfigMap",
+    "metadata": {
+      "name": "ism-approved-registries",
+      "namespace": "kyverno"
+    },
+    "data": {
+      "registries": "registry.internal/*\n"
+    }
+  },
+  {
+    "apiVersion": "apps/v1",
+    "kind": "Deployment",
+    "metadata": {
+      "name": "approved",
+      "namespace": "prod"
+    },
+    "spec": {
+      "selector": {
+        "matchLabels": {
+          "app": "approved"
+        }
+      },
+      "template": {
+        "metadata": {
+          "labels": {
+            "app": "approved"
+          }
+        },
+        "spec": {
+          "containers": [
+            {
+              "name": "api",
+              "image": "registry.internal/api:v1.0.0"
+            }
+          ]
+        }
+      }
+    }
+  }
+]

@@ -1,0 +1,75 @@
+{
+  "name": "ism-network-policy-coverage",
+  "attributes": {
+    "ismControls": [
+      "ISM-1182",
+      "ISM-1416"
+    ],
+    "provenance": {
+      "disposition": "adapt",
+      "upstream": {
+        "repository": "https://github.com/kubescape/regolibrary",
+        "ref": "01f57decc4a771facfb7166f02af986ccb560203",
+        "control_id": "C-0030",
+        "rule_name": "ingress-and-egress-blocked"
+      },
+      "rationale": "The upstream rule establishes the Kubernetes network-policy pattern; the local rule reports workloads not selected by both ingress and egress policy."
+    }
+  },
+  "ruleLanguage": "Rego",
+  "match": [
+    {
+      "apiGroups": [
+        ""
+      ],
+      "apiVersions": [
+        "v1"
+      ],
+      "resources": [
+        "Pod",
+        "Namespace"
+      ]
+    },
+    {
+      "apiGroups": [
+        "apps"
+      ],
+      "apiVersions": [
+        "v1"
+      ],
+      "resources": [
+        "Deployment",
+        "ReplicaSet",
+        "DaemonSet",
+        "StatefulSet"
+      ]
+    },
+    {
+      "apiGroups": [
+        "batch"
+      ],
+      "apiVersions": [
+        "*"
+      ],
+      "resources": [
+        "Job",
+        "CronJob"
+      ]
+    },
+    {
+      "apiGroups": [
+        "networking.k8s.io"
+      ],
+      "apiVersions": [
+        "v1"
+      ],
+      "resources": [
+        "NetworkPolicy"
+      ]
+    }
+  ],
+  "ruleDependencies": [],
+  "description": "Fail workloads that are not selected by both ingress and egress NetworkPolicies.",
+  "remediation": "Apply ingress and egress NetworkPolicies selecting each workload, then allow only required flows.",
+  "ruleQuery": "armo_builtins"
+}

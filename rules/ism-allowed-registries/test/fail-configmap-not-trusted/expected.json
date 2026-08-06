@@ -1,0 +1,6 @@
+{
+  "count": 1,
+  "alerts": [
+    "container image 'registry.internal/api:v1.0.0' is not from an approved registry or repository"
+  ]
+}

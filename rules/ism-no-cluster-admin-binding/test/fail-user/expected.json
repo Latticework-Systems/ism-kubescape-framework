@@ -1,0 +1,6 @@
+{
+  "count": 1,
+  "alerts": [
+    "ClusterRoleBinding 'user-admin' grants cluster-admin to User 'platform-admin'"
+  ]
+}

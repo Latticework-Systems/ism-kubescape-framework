@@ -1,0 +1,101 @@
+name: release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  attestations: write
+  contents: write
+  id-token: write
+
+jobs:
+  bundle:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: "3.12"
+
+      - name: Require a tag from main
+        run: git merge-base --is-ancestor "$GITHUB_SHA" origin/main
+
+      - name: Install OPA
+        run: |
+          set -euo pipefail
+          OPA_VERSION=v1.18.2
+          OPA_PATH="$RUNNER_TEMP/bin/opa"
+          mkdir -p "$RUNNER_TEMP/bin"
+          curl --fail --show-error --silent --location --proto '=https' --tlsv1.2 \
+            --output "$OPA_PATH" \
+            "https://github.com/open-policy-agent/opa/releases/download/${OPA_VERSION}/opa_linux_amd64_static"
+          printf '%s  %s\n' '9903e5125ac281104f2c4b7371d10cc3b74a98933743fcbfc174f9bf0ab20de8' "$OPA_PATH" | sha256sum --check
+          chmod 0755 "$OPA_PATH"
+          echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
+
+      - name: Install Kubescape
+        run: |
+          set -euo pipefail
+          KUBESCAPE_VERSION=4.0.10
+          KUBESCAPE_PATH="$RUNNER_TEMP/bin/kubescape"
+          mkdir -p "$RUNNER_TEMP/bin"
+          curl --fail --show-error --silent --location --proto '=https' --tlsv1.2 \
+            --output "$KUBESCAPE_PATH" \
+            "https://github.com/kubescape/kubescape/releases/download/v${KUBESCAPE_VERSION}/kubescape_${KUBESCAPE_VERSION}_linux_amd64"
+          printf '%s  %s\n' '7ae3dc6a639684b26bb7754bcbb372ba942f4584a88184eaa3b208e00b937241' "$KUBESCAPE_PATH" | sha256sum --check
+          chmod 0755 "$KUBESCAPE_PATH"
+          echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
+
+      - name: Validate source and bundled artifacts
+        run: |
+          make build
+          git diff --exit-code
+          make test smoke integration
+
+      - name: Package release bundle
+        run: |
+          set -euo pipefail
+          archive="ism-kubernetes-bundle-${GITHUB_REF_NAME}.tar.gz"
+          mkdir -p release
+          tar -czf "release/$archive" LICENSE README.md -C dist ism-kubernetes.json controls-inputs.json exceptions.json
+          cd release
+          sha256sum "$archive" > SHA256SUMS
+          echo "ARCHIVE_NAME=$archive" >> "$GITHUB_ENV"
+
+      - name: Attest release bundle
+        uses: actions/attest-build-provenance@977bb373ede98d70efdf65b84cb5f73e068dcc2a # v3
+        with:
+          subject-checksums: release/SHA256SUMS
+
+      - name: Publish GitHub release
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          api="https://api.github.com/repos/$GITHUB_REPOSITORY"
+          release_json="$(jq -n \
+            --arg tag "$GITHUB_REF_NAME" \
+            '{tag_name: $tag, name: $tag, generate_release_notes: true}')"
+          release="$(curl --fail --silent --show-error --location \
+            -X POST \
+            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            -H 'Accept: application/vnd.github+json' \
+            -H 'Content-Type: application/json' \
+            --data "$release_json" "$api/releases")"
+          upload_url="$(printf '%s' "$release" | jq -r '.upload_url' | sed 's/{?name,label}$//')"
+          test -n "$upload_url" && test "$upload_url" != "null"
+          for asset in "release/$ARCHIVE_NAME" release/SHA256SUMS; do
+            name="$(basename "$asset")"
+            curl --fail --silent --show-error --location \
+              -X POST \
+              -H "Authorization: Bearer $GITHUB_TOKEN" \
+              -H 'Accept: application/vnd.github+json' \
+              -H 'Content-Type: application/octet-stream' \
+              --data-binary "@$asset" "$upload_url?name=$name"
+          done

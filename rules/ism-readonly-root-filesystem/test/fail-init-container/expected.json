@@ -1,0 +1,6 @@
+{
+  "count": 1,
+  "alerts": [
+    "container 'bootstrap' does not enforce a read-only root filesystem"
+  ]
+}

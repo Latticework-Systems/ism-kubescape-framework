@@ -1,0 +1,28 @@
+[
+  {
+    "apiVersion": "apps/v1",
+    "kind": "Deployment",
+    "metadata": {
+      "name": "unapproved-init",
+      "namespace": "prod"
+    },
+    "spec": {
+      "template": {
+        "spec": {
+          "initContainers": [
+            {
+              "name": "bootstrap",
+              "image": "docker.io/library/busybox:1.37"
+            }
+          ],
+          "containers": [
+            {
+              "name": "api",
+              "image": "registry.internal/app:v1"
+            }
+          ]
+        }
+      }
+    }
+  }
+]

@@ -1,0 +1,6 @@
+{
+  "count": 1,
+  "alerts": [
+    "namespace 'development' does not enforce the restricted Pod Security Standard"
+  ]
+}

@@ -1,0 +1,52 @@
+[
+  {
+    "apiVersion": "v1",
+    "kind": "Namespace",
+    "metadata": {
+      "name": "production",
+      "labels": {
+        "ism.latticework.systems/environment": "production"
+      }
+    }
+  },
+  {
+    "apiVersion": "kyverno.io/v1",
+    "kind": "ClusterPolicy",
+    "metadata": {
+      "name": "ism-application-control-no-privileged"
+    },
+    "spec": {
+      "validationFailureAction": "Enforce"
+    }
+  },
+  {
+    "apiVersion": "kyverno.io/v1",
+    "kind": "ClusterPolicy",
+    "metadata": {
+      "name": "ism-workload-hardening-security-context"
+    },
+    "spec": {
+      "validationFailureAction": "Enforce"
+    }
+  },
+  {
+    "apiVersion": "kyverno.io/v1",
+    "kind": "ClusterPolicy",
+    "metadata": {
+      "name": "ism-workload-hardening-block-host-namespaces"
+    },
+    "spec": {
+      "validationFailureAction": "Enforce"
+    }
+  },
+  {
+    "apiVersion": "kyverno.io/v1",
+    "kind": "ClusterPolicy",
+    "metadata": {
+      "name": "ism-workload-hardening-block-host-path"
+    },
+    "spec": {
+      "validationFailureAction": "Enforce"
+    }
+  }
+]

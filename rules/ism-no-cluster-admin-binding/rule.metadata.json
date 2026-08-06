@@ -1,0 +1,37 @@
+{
+  "name": "ism-no-cluster-admin-binding",
+  "attributes": {
+    "ismControls": [
+      "ISM-1883"
+    ],
+    "provenance": {
+      "disposition": "adapt",
+      "upstream": {
+        "repository": "https://github.com/kubescape/regolibrary",
+        "ref": "01f57decc4a771facfb7166f02af986ccb560203",
+        "control_id": "C-0185",
+        "rule_name": "cluster-admin-role"
+      },
+      "rationale": "The upstream aggregated rule covers all bound subjects; the standalone local rule applies the same subject scope directly to RBAC bindings."
+    }
+  },
+  "ruleLanguage": "Rego",
+  "match": [
+    {
+      "apiGroups": [
+        "rbac.authorization.k8s.io"
+      ],
+      "apiVersions": [
+        "v1"
+      ],
+      "resources": [
+        "RoleBinding",
+        "ClusterRoleBinding"
+      ]
+    }
+  ],
+  "ruleDependencies": [],
+  "description": "Fail RBAC bindings that grant the cluster-admin ClusterRole to any subject.",
+  "remediation": "Remove cluster-admin and use a narrowly scoped Role or ClusterRole; review emergency access through the downstream exception process.",
+  "ruleQuery": "armo_builtins"
+}

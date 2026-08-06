@@ -1,0 +1,45 @@
+{
+  "controlID": "ISM-K8S-NETWORK-POLICY-COVERAGE",
+  "name": "Network policy coverage",
+  "description": "Fail workloads that are not selected by both ingress and egress NetworkPolicies.",
+  "long_description": "ISM-1182 (partial): Findings show whether Kubernetes workloads are selected by ingress and egress NetworkPolicies; they do not prove that allowed flows match business need or that the cluster network plugin enforces the policies. ISM-1416 (partial): NetworkPolicy coverage is evidence of workload-level traffic restriction only; it does not prove host firewall coverage, approved application and service lists, or effective enforcement by the cluster network plugin.",
+  "remediation": "Apply ingress and egress NetworkPolicies selecting each workload, then allow only required flows.",
+  "rulesNames": [
+    "ism-network-policy-coverage"
+  ],
+  "references": [
+    "https://www.cyber.gov.au/ism/oscal/latest-version/artifacts/ISM_catalog.json",
+    "https://github.com/kubescape/regolibrary/tree/01f57decc4a771facfb7166f02af986ccb560203"
+  ],
+  "attributes": {
+    "controlTypeTags": [
+      "compliance"
+    ],
+    "ismControls": [
+      "ISM-1182",
+      "ISM-1416"
+    ],
+    "mappingRelease": "2026-06",
+    "mappingSourceSha256": "55481829a5725bdbd6b840940a5eabf2c4f8e36e163ca30ab0338f32c5cc7bdb",
+    "provenance": {
+      "disposition": "adapt",
+      "upstream": {
+        "repository": "https://github.com/kubescape/regolibrary",
+        "ref": "01f57decc4a771facfb7166f02af986ccb560203",
+        "control_id": "C-0030",
+        "rule_name": "ingress-and-egress-blocked"
+      },
+      "rationale": "The upstream rule establishes the Kubernetes network-policy pattern; the local rule reports workloads not selected by both ingress and egress policy."
+    }
+  },
+  "baseScore": 7.0,
+  "category": {
+    "name": "Workload"
+  },
+  "scanningScope": {
+    "matches": [
+      "cluster",
+      "file"
+    ]
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "count": 1,
+  "alerts": [
+    "Deployment 'api' is not selected by both ingress and egress NetworkPolicies"
+  ]
+}

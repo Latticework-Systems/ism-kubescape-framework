@@ -1,0 +1,37 @@
+{
+  "controlID": "ISM-K8S-MINIMISE-CLUSTERROLEBINDINGS",
+  "name": "Minimise clusterrolebindings",
+  "description": "Fail non-system ClusterRoleBindings that grant cluster-wide roles to service accounts.",
+  "long_description": "ISM-1883 (partial): RBAC and service-account findings show Kubernetes privilege breadth; they do not prove authorisation workflow, human account lifecycle or external systems.",
+  "remediation": "Replace service-account ClusterRoleBindings with namespace-scoped RoleBindings where possible, or document why cluster-wide access is required.",
+  "rulesNames": [
+    "ism-minimise-clusterrolebindings"
+  ],
+  "references": [
+    "https://www.cyber.gov.au/ism/oscal/latest-version/artifacts/ISM_catalog.json"
+  ],
+  "attributes": {
+    "controlTypeTags": [
+      "compliance"
+    ],
+    "ismControls": [
+      "ISM-1883"
+    ],
+    "mappingRelease": "2026-06",
+    "mappingSourceSha256": "55481829a5725bdbd6b840940a5eabf2c4f8e36e163ca30ab0338f32c5cc7bdb",
+    "provenance": {
+      "disposition": "custom",
+      "rationale": "Upstream administrative-role controls identify cluster-admin-equivalent access, not every non-system cluster-wide service-account binding."
+    }
+  },
+  "baseScore": 8.0,
+  "category": {
+    "name": "Access control"
+  },
+  "scanningScope": {
+    "matches": [
+      "cluster",
+      "file"
+    ]
+  }
+}

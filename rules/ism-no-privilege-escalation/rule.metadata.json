@@ -1,0 +1,63 @@
+{
+  "name": "ism-no-privilege-escalation",
+  "attributes": {
+    "ismControls": [
+      "ISM-1246",
+      "ISM-1604"
+    ],
+    "provenance": {
+      "disposition": "adapt",
+      "upstream": {
+        "repository": "https://github.com/kubescape/regolibrary",
+        "ref": "01f57decc4a771facfb7166f02af986ccb560203",
+        "control_id": "C-0016",
+        "rule_name": "rule-allow-privilege-escalation"
+      },
+      "rationale": "The local rule applies the upstream explicit-false requirement to regular and init containers."
+    }
+  },
+  "ruleLanguage": "Rego",
+  "match": [
+    {
+      "apiGroups": [
+        ""
+      ],
+      "apiVersions": [
+        "v1"
+      ],
+      "resources": [
+        "Pod"
+      ]
+    },
+    {
+      "apiGroups": [
+        "apps"
+      ],
+      "apiVersions": [
+        "v1"
+      ],
+      "resources": [
+        "Deployment",
+        "ReplicaSet",
+        "DaemonSet",
+        "StatefulSet"
+      ]
+    },
+    {
+      "apiGroups": [
+        "batch"
+      ],
+      "apiVersions": [
+        "*"
+      ],
+      "resources": [
+        "Job",
+        "CronJob"
+      ]
+    }
+  ],
+  "ruleDependencies": [],
+  "description": "Fail containers that do not explicitly disable privilege escalation.",
+  "remediation": "Set securityContext.allowPrivilegeEscalation=false for every container and init container.",
+  "ruleQuery": "armo_builtins"
+}

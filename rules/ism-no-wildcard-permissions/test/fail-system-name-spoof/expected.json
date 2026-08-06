@@ -1,0 +1,8 @@
+{
+  "count": 3,
+  "alerts": [
+    "ClusterRole 'system:metrics-helper' contains wildcard RBAC permissions",
+    "ClusterRole 'system:metrics-helper' contains wildcard RBAC permissions",
+    "ClusterRole 'system:metrics-helper' contains wildcard RBAC permissions"
+  ]
+}

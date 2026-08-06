@@ -1,0 +1,31 @@
+{
+  "name": "ism-no-wildcard-permissions",
+  "attributes": {
+    "ismControls": [
+      "ISM-1883"
+    ],
+    "provenance": {
+      "disposition": "custom",
+      "rationale": "Kubescape control C-0187 currently points to a cluster-admin enumeration rule rather than a rule dedicated to wildcard RBAC fields."
+    }
+  },
+  "ruleLanguage": "Rego",
+  "match": [
+    {
+      "apiGroups": [
+        "rbac.authorization.k8s.io"
+      ],
+      "apiVersions": [
+        "v1"
+      ],
+      "resources": [
+        "Role",
+        "ClusterRole"
+      ]
+    }
+  ],
+  "ruleDependencies": [],
+  "description": "Fail Roles and ClusterRoles that use wildcard apiGroups, resources, or verbs.",
+  "remediation": "Replace wildcard permissions with explicit resources, apiGroups, and verbs.",
+  "ruleQuery": "armo_builtins"
+}
