@@ -1,0 +1,1 @@
+[{"apiVersion":"v1","kind":"Pod","metadata":{"name":"api","namespace":"prod"},"spec":{"initContainers":[{"name":"setup","image":"example/api:v1","securityContext":{"capabilities":{"drop":["ALL"],"add":["CAP_SYS_ADMIN","NET_BIND_SERVICE","net_raw"]}}}],"containers":[{"name":"api","image":"example/api:v1","securityContext":{"capabilities":{"drop":["ALL"]}}}]}}]

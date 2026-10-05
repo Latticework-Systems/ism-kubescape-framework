@@ -1,9 +1,9 @@
 {
   "controlID": "ISM-K8S-DROP-ALL-CAPABILITIES",
   "name": "Drop all capabilities",
-  "description": "Fail containers that do not drop all Linux capabilities.",
+  "description": "Fail containers that do not drop all Linux capabilities or that add any back other than NET_BIND_SERVICE.",
   "long_description": "ISM-1246 (partial): Findings show selected Kubernetes workload hardening settings; they do not prove that all ASD and vendor guidance was identified, reconciled or implemented. ISM-1604 (partial): Findings show selected container isolation and workload hardening settings; they do not assess the Kubernetes control plane, node runtime configuration or every administrative interface used to manage the isolation mechanism.",
-  "remediation": "Set securityContext.capabilities.drop=[ALL] and add back only capabilities with a documented need.",
+  "remediation": "Set securityContext.capabilities.drop=[ALL] and add back nothing except NET_BIND_SERVICE. Record any other documented need as a reviewed exception.",
   "rulesNames": [
     "ism-drop-all-capabilities"
   ],

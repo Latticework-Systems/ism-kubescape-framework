@@ -1,0 +1,1 @@
+{"count":2,"alerts":["container 'api' does not drop all Linux capabilities","container 'api' adds Linux capabilities: SYS_PTRACE"]}
