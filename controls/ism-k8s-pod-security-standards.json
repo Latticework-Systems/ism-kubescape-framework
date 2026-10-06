@@ -21,8 +21,8 @@
       "ISM-1657",
       "ISM-1871"
     ],
-    "mappingRelease": "2026-06",
-    "mappingSourceSha256": "55481829a5725bdbd6b840940a5eabf2c4f8e36e163ca30ab0338f32c5cc7bdb",
+    "mappingRelease": "2026-09",
+    "mappingSourceSha256": "417a13db5d2179eaefb6636617e3aa6c9bb30cc493efbdfaba2938192ba8e275",
     "provenance": {
       "disposition": "custom",
       "rationale": "No single upstream control checks namespace Pod Security Admission or an equivalent enforced Kyverno policy set."

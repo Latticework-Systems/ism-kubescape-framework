@@ -34,7 +34,6 @@ payload = json.loads(Path(sys.argv[1]).read_text())
 assert payload["ControlsIDs"] == [
     "ISM-K8S-ALLOWED-REGISTRIES",
     "ISM-K8S-DROP-ALL-CAPABILITIES",
-    "ISM-K8S-MINIMISE-CLUSTERROLEBINDINGS",
     "ISM-K8S-NETWORK-POLICY-COVERAGE",
     "ISM-K8S-NO-CLUSTER-ADMIN-BINDING",
     "ISM-K8S-NO-HOST-ACCESS",

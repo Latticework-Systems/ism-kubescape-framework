@@ -78,7 +78,6 @@ The generated `ism-kubernetes` framework contains:
 
 - approved image registries;
 - dropped Linux capabilities;
-- restricted `ClusterRoleBinding` use;
 - ingress and egress NetworkPolicy coverage;
 - protected `cluster-admin` bindings;
 - blocked host namespaces, `hostPath`, and `hostPort`;
@@ -90,7 +89,7 @@ The generated `ism-kubernetes` framework contains:
 - read-only container root filesystems; and
 - approved seccomp profiles.
 
-These checks provide partial evidence for ISM-1182, ISM-1246, ISM-1416, ISM-1490, ISM-1604, ISM-1657, ISM-1871, and ISM-1883. Organisational, identity-provider, endpoint, vulnerability-management, backup, control-plane, and assessor evidence require other sources.
+These checks provide partial evidence for ISM-1182, ISM-1246, ISM-1416, ISM-1490, ISM-1604, ISM-1657, ISM-1871, ISM-1883, and ISM-2128 in the September 2026 ISM. Organisational, identity-provider, endpoint, vulnerability-management, backup, control-plane, and assessor evidence require other sources.
 
 ## Repository contents
 

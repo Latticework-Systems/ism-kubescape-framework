@@ -2,7 +2,7 @@
   "controlID": "ISM-K8S-NO-PRIVILEGED-CONTAINERS",
   "name": "No privileged containers",
   "description": "Fail workloads that run privileged containers or add the SYS_ADMIN capability.",
-  "long_description": "ISM-1246 (partial): Findings show selected Kubernetes workload hardening settings; they do not prove that all ASD and vendor guidance was identified, reconciled or implemented. ISM-1490 (partial): Scan and PolicyReport results show workload image and execution guardrails on Kubernetes servers; they do not prove host or endpoint application control. ISM-1604 (partial): Findings show selected container isolation and workload hardening settings; they do not assess the Kubernetes control plane, node runtime configuration or every administrative interface used to manage the isolation mechanism. ISM-1657 (partial): Approved-image and workload-execution findings evidence the Kubernetes translation of application control; they do not inspect binaries inside images. ISM-1871 (partial): Cluster-wide workload findings show whether the Kubernetes translation is applied across scanned namespaces; they do not assess host filesystem locations.",
+  "long_description": "ISM-1246 (partial): Findings show selected Kubernetes workload hardening settings; they do not prove that all ASD and vendor guidance was identified, reconciled or implemented. ISM-1490 (partial): Scan and PolicyReport results show workload image and execution guardrails on Kubernetes servers; they do not prove host or endpoint application control. ISM-1604 (partial): Findings show selected container isolation and workload hardening settings; they do not assess the Kubernetes control plane, node runtime configuration or every administrative interface used to manage the isolation mechanism. ISM-1657 (partial): Approved-image and workload-execution findings evidence the Kubernetes translation of application control; they do not inspect binaries inside images. ISM-1871 (partial): Cluster-wide workload findings show whether the Kubernetes translation is applied across scanned namespaces; they do not assess host filesystem locations. ISM-2128 (partial): Findings show whether workloads run privileged, which grants the capability to load kernel modules, or add SYS_ADMIN; they do not detect other added capabilities such as SYS_MODULE, and do not assess node access, driver signing or which privileged users can modify kernel-mode code.",
   "remediation": "Remove privileged mode and drop SYS_ADMIN unless it is explicitly required.",
   "rulesNames": [
     "ism-no-privileged-containers"
@@ -20,10 +20,11 @@
       "ISM-1490",
       "ISM-1604",
       "ISM-1657",
-      "ISM-1871"
+      "ISM-1871",
+      "ISM-2128"
     ],
-    "mappingRelease": "2026-06",
-    "mappingSourceSha256": "55481829a5725bdbd6b840940a5eabf2c4f8e36e163ca30ab0338f32c5cc7bdb",
+    "mappingRelease": "2026-09",
+    "mappingSourceSha256": "417a13db5d2179eaefb6636617e3aa6c9bb30cc493efbdfaba2938192ba8e275",
     "provenance": {
       "disposition": "adapt",
       "upstream": {

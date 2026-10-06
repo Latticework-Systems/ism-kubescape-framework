@@ -18,8 +18,8 @@
       "ISM-1246",
       "ISM-1604"
     ],
-    "mappingRelease": "2026-06",
-    "mappingSourceSha256": "55481829a5725bdbd6b840940a5eabf2c4f8e36e163ca30ab0338f32c5cc7bdb",
+    "mappingRelease": "2026-09",
+    "mappingSourceSha256": "417a13db5d2179eaefb6636617e3aa6c9bb30cc493efbdfaba2938192ba8e275",
     "provenance": {
       "disposition": "custom",
       "rationale": "The rule combines host namespace, host port and hostPath checks that are separate controls upstream, so no single upstream control is authoritative."
