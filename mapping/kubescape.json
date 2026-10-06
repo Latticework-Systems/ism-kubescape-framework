@@ -2,7 +2,7 @@
   "schema_version": "1.0",
   "source": {
     "canonical": "../ism-mapping.yaml",
-    "ism_release": "2026-06",
+    "ism_release": "2026-09",
     "generated": true,
     "provenance_lock": "../provenance.lock.yaml"
   },
@@ -68,21 +68,6 @@
       ]
     },
     {
-      "rule_id": "ism-minimise-clusterrolebindings",
-      "provenance": {
-        "disposition": "custom",
-        "rationale": "Upstream administrative-role controls identify cluster-admin-equivalent access, not every non-system cluster-wide service-account binding."
-      },
-      "ism_controls": [
-        {
-          "ism_id": "ISM-1883",
-          "title": "Privileged user accounts explicitly authorised to access online services are strictly limited to only what is required for users and services to undertake their duties.",
-          "coverage": "partial",
-          "evidence_note": "RBAC and service-account findings show Kubernetes privilege breadth; they do not prove authorisation workflow, human account lifecycle or external systems."
-        }
-      ]
-    },
-    {
       "rule_id": "ism-network-policy-coverage",
       "provenance": {
         "disposition": "adapt",
@@ -124,9 +109,9 @@
       "ism_controls": [
         {
           "ism_id": "ISM-1883",
-          "title": "Privileged user accounts explicitly authorised to access online services are strictly limited to only what is required for users and services to undertake their duties.",
+          "title": "Privileged user accounts explicitly authorised to access online services are strictly limited to only what is required for users to undertake their duties or functions.",
           "coverage": "partial",
-          "evidence_note": "RBAC and service-account findings show Kubernetes privilege breadth; they do not prove authorisation workflow, human account lifecycle or external systems."
+          "evidence_note": "RBAC findings show Kubernetes permission breadth and cluster-admin assignments; they do not establish which privileged human accounts require online-service access, authorisation workflow, human account lifecycle or external systems."
         }
       ]
     },
@@ -220,6 +205,12 @@
           "title": "Application control is applied to all locations other than user profiles and temporary folders used by operating systems, web browsers and email clients.",
           "coverage": "partial",
           "evidence_note": "Cluster-wide workload findings show whether the Kubernetes translation is applied across scanned namespaces; they do not assess host filesystem locations."
+        },
+        {
+          "ism_id": "ISM-2128",
+          "title": "The ability to install, load or modify kernel-mode code, including drivers, kernel modules and extensions, is limited to privileged users who require such abilities as part of their duties or functions.",
+          "coverage": "partial",
+          "evidence_note": "Findings show whether workloads run privileged, which grants the capability to load kernel modules, or add SYS_ADMIN; they do not detect other added capabilities such as SYS_MODULE, and do not assess node access, driver signing or which privileged users can modify kernel-mode code."
         }
       ]
     },
@@ -232,9 +223,9 @@
       "ism_controls": [
         {
           "ism_id": "ISM-1883",
-          "title": "Privileged user accounts explicitly authorised to access online services are strictly limited to only what is required for users and services to undertake their duties.",
+          "title": "Privileged user accounts explicitly authorised to access online services are strictly limited to only what is required for users to undertake their duties or functions.",
           "coverage": "partial",
-          "evidence_note": "RBAC and service-account findings show Kubernetes privilege breadth; they do not prove authorisation workflow, human account lifecycle or external systems."
+          "evidence_note": "RBAC findings show Kubernetes permission breadth and cluster-admin assignments; they do not establish which privileged human accounts require online-service access, authorisation workflow, human account lifecycle or external systems."
         }
       ]
     },
@@ -359,5 +350,10 @@
       ]
     }
   ],
-  "excluded_unmapped_rules": []
+  "excluded_unmapped_rules": [
+    {
+      "rule_id": "ism-minimise-clusterrolebindings",
+      "reason": "The detector counts non-system cluster-wide service-account bindings. The September 2026 ISM-1883 statement concerns privileged user accounts and no longer includes services; this detector does not evaluate human account access."
+    }
+  ]
 }
