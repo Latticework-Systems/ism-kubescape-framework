@@ -18,7 +18,7 @@
       "ISM-1883"
     ],
     "mappingRelease": "2026-09",
-    "mappingSourceSha256": "417a13db5d2179eaefb6636617e3aa6c9bb30cc493efbdfaba2938192ba8e275",
+    "mappingSourceSha256": "4e4916b8968d02478da8585e89d7751754398120a7aefc8f67058b33280ad3dd",
     "provenance": {
       "disposition": "custom",
       "rationale": "Kubescape control C-0187 currently points to a cluster-admin enumeration rule rather than a rule dedicated to wildcard RBAC fields."

@@ -5,6 +5,19 @@ metadata:
   labels:
     pod-security.kubernetes.io/enforce: restricted
 ---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: default
+  namespace: production
+automountServiceAccountToken: false
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: api
+  namespace: production
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:

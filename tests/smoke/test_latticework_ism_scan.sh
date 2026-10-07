@@ -33,6 +33,7 @@ from pathlib import Path
 payload = json.loads(Path(sys.argv[1]).read_text())
 assert payload["ControlsIDs"] == [
     "ISM-K8S-ALLOWED-REGISTRIES",
+    "ISM-K8S-DEFAULT-SERVICE-ACCOUNTS",
     "ISM-K8S-DROP-ALL-CAPABILITIES",
     "ISM-K8S-NETWORK-POLICY-COVERAGE",
     "ISM-K8S-NO-CLUSTER-ADMIN-BINDING",
@@ -224,6 +225,8 @@ ARTIFACTS_DIR="$ARTIFACTS_DIR" bash "$ROOT/scripts/latticework_ism_scan.sh" \
 json_output="$(find "$EVIDENCE_DIR" -name 'cluster-scan-*.json' -print -quit)"
 
 test -n "$json_output"
+grep -qE '^[[:space:]]+- serviceaccounts$' "$RBAC_SNAPSHOT"
+! grep -qE '^[[:space:]]+- secrets$' "$RBAC_SNAPSHOT"
 test -z "$(find "$ARTIFACTS_DIR" -mindepth 1 -maxdepth 1 -name 'latticework-ism-scan-*' -print -quit)"
 
 grep -q 'Falling back to the default registry allow list' "$scan_stderr"

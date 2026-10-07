@@ -4,6 +4,13 @@ metadata:
   name: production
 ---
 apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: default
+  namespace: production
+automountServiceAccountToken: true
+---
+apiVersion: v1
 kind: ConfigMap
 metadata:
   name: ism-approved-registries
