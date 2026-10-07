@@ -12,7 +12,7 @@ Start with `make latticework-ism-scan`. The command builds the scanner artifacts
 - `python3`
 - a selected Kubernetes context that can create and delete the temporary scan RBAC
 
-The starter identity in [examples/scan-reader-rbac.yaml](../examples/scan-reader-rbac.yaml) can read the workload, namespace, NetworkPolicy, and RBAC resources needed by the current rules. A separate namespaced Role grants `get` access to the selected registry ConfigMap only. The identity cannot list ConfigMaps or read Secrets.
+The starter identity in [examples/scan-reader-rbac.yaml](../examples/scan-reader-rbac.yaml) can read workload, namespace, ServiceAccount, NetworkPolicy, and RBAC resources needed by the current rules. A separate namespaced Role grants `get` access to the selected registry ConfigMap only. The identity cannot list ConfigMaps or read Secrets.
 
 ## Guided scan
 

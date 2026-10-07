@@ -77,6 +77,7 @@ Kubescape, NSA, CIS, and MITRE rules serve as provenance exemplars. The framewor
 The generated `ism-kubernetes` framework contains:
 
 - approved image registries;
+- dedicated service accounts with default token automount disabled;
 - dropped Linux capabilities;
 - ingress and egress NetworkPolicy coverage;
 - protected `cluster-admin` bindings;
@@ -89,7 +90,7 @@ The generated `ism-kubernetes` framework contains:
 - read-only container root filesystems; and
 - approved seccomp profiles.
 
-These checks provide partial evidence for ISM-1182, ISM-1246, ISM-1416, ISM-1490, ISM-1604, ISM-1657, ISM-1871, ISM-1883, and ISM-2128 in the September 2026 ISM. Organisational, identity-provider, endpoint, vulnerability-management, backup, control-plane, and assessor evidence require other sources.
+These checks provide partial evidence for ISM-1182, ISM-1246, ISM-1416, ISM-1490, ISM-1604, ISM-1657, ISM-1871, ISM-1883, ISM-2128, and ISM-2143 in the September 2026 ISM. Organisational, identity-provider, endpoint, vulnerability-management, backup, control-plane, and assessor evidence require other sources.
 
 ## Repository contents
 

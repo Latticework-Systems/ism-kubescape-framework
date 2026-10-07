@@ -1,0 +1,37 @@
+{
+  "name": "ism-default-service-accounts",
+  "attributes": {
+    "ismControls": [
+      "ISM-2143"
+    ],
+    "provenance": {
+      "disposition": "adapt",
+      "upstream": {
+        "repository": "https://github.com/kubescape/regolibrary",
+        "ref": "01f57decc4a771facfb7166f02af986ccb560203",
+        "control_id": "C-0189",
+        "rule_name": "automount-default-service-account"
+      },
+      "rationale": "The local detector combines C-0189's checks for default-account token automount and a dedicated non-default ServiceAccount in each scanned namespace."
+    }
+  },
+  "ruleLanguage": "Rego",
+  "match": [
+    {
+      "apiGroups": [
+        ""
+      ],
+      "apiVersions": [
+        "v1"
+      ],
+      "resources": [
+        "Namespace",
+        "ServiceAccount"
+      ]
+    }
+  ],
+  "ruleDependencies": [],
+  "description": "Fail namespaces with no non-default ServiceAccount and default ServiceAccounts that may automount API tokens.",
+  "remediation": "Create a dedicated ServiceAccount for each namespace that needs Kubernetes API access, and set automountServiceAccountToken: false on each default ServiceAccount.",
+  "ruleQuery": "armo_builtins"
+}

@@ -41,6 +41,27 @@
       ]
     },
     {
+      "rule_id": "ism-default-service-accounts",
+      "provenance": {
+        "disposition": "adapt",
+        "upstream": {
+          "repository": "https://github.com/kubescape/regolibrary",
+          "ref": "01f57decc4a771facfb7166f02af986ccb560203",
+          "control_id": "C-0189",
+          "rule_name": "automount-default-service-account"
+        },
+        "rationale": "The local detector combines C-0189's checks for default-account token automount and a dedicated non-default ServiceAccount in each scanned namespace."
+      },
+      "ism_controls": [
+        {
+          "ism_id": "ISM-2143",
+          "title": "Applications and workloads use unique credentials that are not shared with other applications or workloads, or across development, testing, staging and production environments.",
+          "coverage": "partial",
+          "evidence_note": "Kubescape findings show that scanned namespaces include a non-default ServiceAccount and that the default ServiceAccount disables token automount. Kyverno PolicyReports provide admission-time evidence for the corresponding policies. Neither proves that each workload uses its own account or that credentials are unique across workloads and environments, or says anything about credentials held outside Kubernetes service accounts."
+        }
+      ]
+    },
+    {
       "rule_id": "ism-drop-all-capabilities",
       "provenance": {
         "disposition": "adapt",
@@ -50,7 +71,7 @@
           "control_id": "C-0046",
           "rule_name": "insecure-capabilities"
         },
-        "rationale": "The local rule uses the upstream capability model but requires every regular and init container to drop ALL capabilities."
+        "rationale": "The local rule requires every regular and init container to drop ALL capabilities and allows only NET_BIND_SERVICE to be added back."
       },
       "ism_controls": [
         {
@@ -64,6 +85,12 @@
           "title": "When using a software-based isolation mechanism that consumes shared physical computing resources, the configuration of the isolation mechanism is hardened by removing unneeded functionality and restricting access to the administrative interface used to manage the isolation mechanism.",
           "coverage": "partial",
           "evidence_note": "Findings show selected container isolation and workload hardening settings; they do not assess the Kubernetes control plane, node runtime configuration or every administrative interface used to manage the isolation mechanism."
+        },
+        {
+          "ism_id": "ISM-2128",
+          "title": "The ability to install, load or modify kernel-mode code, including drivers, kernel modules and extensions, is limited to privileged users who require such abilities as part of their duties or functions.",
+          "coverage": "partial",
+          "evidence_note": "Findings show whether workloads run privileged or add SYS_ADMIN, and whether regular or init containers add capabilities back after dropping ALL other than NET_BIND_SERVICE. The added-capability check does not cover ephemeral containers; these findings do not assess node access, driver signing or which privileged users can modify kernel-mode code."
         }
       ]
     },
@@ -210,7 +237,7 @@
           "ism_id": "ISM-2128",
           "title": "The ability to install, load or modify kernel-mode code, including drivers, kernel modules and extensions, is limited to privileged users who require such abilities as part of their duties or functions.",
           "coverage": "partial",
-          "evidence_note": "Findings show whether workloads run privileged, which grants the capability to load kernel modules, or add SYS_ADMIN; they do not detect other added capabilities such as SYS_MODULE, and do not assess node access, driver signing or which privileged users can modify kernel-mode code."
+          "evidence_note": "Findings show whether workloads run privileged or add SYS_ADMIN, and whether regular or init containers add capabilities back after dropping ALL other than NET_BIND_SERVICE. The added-capability check does not cover ephemeral containers; these findings do not assess node access, driver signing or which privileged users can modify kernel-mode code."
         }
       ]
     },
